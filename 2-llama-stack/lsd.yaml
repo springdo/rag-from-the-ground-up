@@ -50,14 +50,45 @@ spec:
             secretKeyRef:
               name: llama-stack-secret
               key: VLLM_MAX_TOKENS
-        
-        # 2. FIX: Define the embedding provider correctly
-        # In RHOAI, the stack often expects 'inline_sentence_transformers' 
-        # or a specific remote ID. If you are using vLLM for embeddings:
+
+        # Enable inline embeddings with sentence-transformers
+        # This is needed to prevent the cannot find `vllm-embedding` provider error
+        - name: ENABLE_SENTENCE_TRANSFORMERS
+          value: "true"
+        - name: EMBEDDING_PROVIDER
+          value: "sentence-transformers"
+
+        # # Remote embedding configuration
         # - name: EMBEDDING_MODEL
-        #   value: "nomic-ai/nomic-embed-text-v1.5"
-        # - name: EMBEDDING_PROVIDER_ID
-        #   value: "vllm-embedding" # Change 'vllm-embedding' to 'remote_vllm'
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: EMBEDDING_MODEL
+        # - name: EMBEDDING_PROVIDER_MODEL_ID
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: EMBEDDING_PROVIDER_MODEL_ID
+        # - name: VLLM_EMBEDDING_URL
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: VLLM_EMBEDDING_URL
+        # - name: VLLM_EMBEDDING_TLS_VERIFY
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: VLLM_EMBEDDING_TLS_VERIFY
+        # - name: VLLM_EMBEDDING_API_TOKEN
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: VLLM_EMBEDDING_API_TOKEN
+        # - name: VLLM_EMBEDDING_MAX_TOKENS
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: llama-stack-secret
+        #       key: VLLM_EMBEDDING_MAX_TOKENS
 
         # Vector DB Configuration (Inline Milvus)
         - name: VECTOR_DB_PROVIDER
