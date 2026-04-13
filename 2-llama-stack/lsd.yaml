@@ -5,6 +5,12 @@ metadata:
   namespace: rag-testing
 spec:
   replicas: 1
+  # borrowed brilliance :)
+  # https://github.com/rhoai-genaiops/genaiops-helmcharts/blob/main/charts/llama-stack-operator-instance/templates/lls-distribution.yaml#L9
+  network:
+    allowedFrom:
+      namespaces: 
+        - "*"
   server:
     containerSpec:
       env:
